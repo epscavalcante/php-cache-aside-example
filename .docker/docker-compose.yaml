@@ -1,0 +1,10 @@
+services:
+  app:
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    volumes:
+      - ../:/var/www
+    ports:
+      - "8000:80"
+      
