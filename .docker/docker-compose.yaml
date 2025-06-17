@@ -7,4 +7,14 @@ services:
       - ../:/var/www
     ports:
       - "8000:80"
+
+  redis:
+    build:
+      context: ./redis
+      dockerfile: Dockerfile
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - ./redis/data:/data
+    ports:
+      - "6379:6379"
       
