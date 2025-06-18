@@ -7,8 +7,9 @@ namespace Src\Infrastructure\Http\Controllers;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Src\Application\UseCases\GetFeaturedProductList\GetFeaturedProductListUseCase;
-use Src\Application\UseCases\GetFeaturedProductList\UpdateFeaturedProductListUseCase;
+use Src\Application\UseCases\UpdateFeaturedProductList\UpdateFeaturedProductListUseCase;
 use Src\Application\UseCases\GetProductList\GetProductListUseCase;
+use Src\Infrastructure\Cache\ProductFeaturedCache;
 use Src\Infrastructure\Cache\RedisCacheAdapter;
 use Src\Infrastructure\Repositories\MemoryProductRepository;
 
@@ -31,9 +32,10 @@ class ProductController
     {
         $productRepository = new MemoryProductRepository();
         $cache = new RedisCacheAdapter();
+        $productFeaturedCache = new ProductFeaturedCache($cache);
         $useCase = new GetFeaturedProductListUseCase(
             productRepository: $productRepository,
-            cache: $cache,
+            productFeaturedCache: $productFeaturedCache,
         );
         $output = $useCase->execute();
         $response->getBody()->write(json_encode($output, JSON_PRETTY_PRINT));
@@ -46,9 +48,10 @@ class ProductController
     {
         $productRepository = new MemoryProductRepository();
         $cache = new RedisCacheAdapter();
+        $productFeaturedCache = new ProductFeaturedCache($cache);
         $useCase = new UpdateFeaturedProductListUseCase(
             productRepository: $productRepository,
-            cache: $cache,
+            productFeaturedCache: $productFeaturedCache,
         );
         $useCase->execute();
         $response->getBody()->write(json_encode(['message' => 'Featured product list updated successfully'], JSON_PRETTY_PRINT));

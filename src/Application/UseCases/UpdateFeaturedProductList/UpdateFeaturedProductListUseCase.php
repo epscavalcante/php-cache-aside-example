@@ -2,17 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Src\Application\UseCases\GetFeaturedProductList;
+namespace Src\Application\UseCases\UpdateFeaturedProductList;
 
 use Src\Domain\Repositories\ProductRepositoryInterface;
-use Src\Infrastructure\Cache\CacheInterface;
+use Src\Infrastructure\Cache\ProductFeaturedCache;
 
 class UpdateFeaturedProductListUseCase
 {
-    private const CACHE_KEY = 'catalog:featured_products:v1';
-
     public function __construct(
-        private readonly CacheInterface $cache,
+        private readonly ProductFeaturedCache $productFeaturedCache,
         private readonly ProductRepositoryInterface $productRepository,
     ) {}
 
@@ -20,6 +18,6 @@ class UpdateFeaturedProductListUseCase
     {
         $this->productRepository->updateFeaturedList();
 
-        $this->cache->delete(self::CACHE_KEY);
+        $this->productFeaturedCache->clear();
     }
 }
