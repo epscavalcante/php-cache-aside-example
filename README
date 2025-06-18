@@ -1,1 +1,48 @@
 # Catálogo de Produtos  - Cache Aside com Redis e PHP
+
+
+## 💡 Decisões Técnicas
+
+- Uso de `Predis` com PSR-16 para abstrair a comunicação com o Redis.
+- Criação da classe `ProductFeaturedCache` para encapsular serialização e uso de chave de cache.
+- Injeção de dependências feita manualmente, sem container de DI, para manter a simplicidade.
+- Use Cases agnósticos à infraestrutura (não conhecem Redis, logs, nem detalhes técnicos).
+
+---
+
+## ⚖️ Trade-offs e Melhorias Futuras
+
+| Ponto Atual | Trade-off | Sugestão de Evolução |
+|-------------|-----------|----------------------|
+| `serialize()` para armazenar objetos | Simples e direto | Substituir por `json_encode` + DTOs bem definidos |
+| Injeção manual de dependências | Simples de entender | Usar `PHP-DI` ou container leve |
+| Sem logger inicialmente | Foco em funcionalidade | Adicionar log para falhas no cache (ex: erro de unserialize) |
+| Cache limpo diretamente no use case | Simples, mas acoplado | Desacoplar com **Event Dispatcher + Listeners** |
+| Uso de `array` puro | Rápido para começar | Criar e utilizar **DTOs** para deixar claro o contrato de dados |
+
+---
+
+## 📈 Próximos Passos
+
+- [ ] Adicionar **logger** para rastrear falhas de cache (ex: dados corrompidos).
+- [ ] Substituir `array` por **DTOs** de entrada/saída.
+- [ ] Adicionar um **.env** e lógica para escolher adapter de cache dinamicamente.
+- [ ] Usar **Event Dispatcher** para emitir eventos como `FeaturedProductListUpdated`.
+- [ ] Adicionar testes unitários e de integração.
+- [ ] Usar container de injeção de dependências (`PHP-DI`).
+
+---
+
+## 📚 Conceitos Demonstrados
+
+- ✅ Cache-Aside Pattern
+- ✅ PSR-16 (Simple Cache)
+- ✅ Clean Architecture
+- ✅ Domain-Driven Design
+- ✅ Inversão de Dependência
+- ✅ Separação de Responsabilidades
+
+---
+
+> Feito com 💡 para fins de aprendizado, demonstração técnica e boas práticas de arquitetura em PHP.
+
